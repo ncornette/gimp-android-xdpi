@@ -51,15 +51,17 @@ def write_xdpi(img, layer, res_folder, image_basename, target_width, target_dpi,
     
     warnings = list()
     
-    # resize requested by the user
-    resize_ratio = float(target_width) / float(img.width)
-    
     # reference density requested by the user
     target_density_ratio = dict(dpi_ratios).get(target_dpi)
     
     gimpfu.pdb.gimp_edit_copy_visible(img); #@UndefinedVariable
     
     for dpi_ratio in dpi_ratios:
+        new_img = gimpfu.pdb.gimp_edit_paste_as_new(); #@UndefinedVariable
+        
+        # resize requested by the user
+        resize_ratio = float(target_width) / float(new_img.width)
+
         target_res_folder = os.path.join(res_folder, dpi_ratio[0])
         if (os.path.exists(res_folder) and not os.path.exists(target_res_folder)):
             os.makedirs(target_res_folder)
@@ -68,15 +70,17 @@ def write_xdpi(img, layer, res_folder, image_basename, target_width, target_dpi,
         
         # Compute new dimensions for the image
         density_ratio = dpi_ratio[1]
-        new_width = round(img.width / target_density_ratio * density_ratio * resize_ratio)
-        new_height = round(img.height / target_density_ratio * density_ratio * resize_ratio)
         
-        if (new_width>img.width):
+        new_width = round(float(new_img.width) / target_density_ratio * density_ratio * resize_ratio)
+        new_height = round(float(new_img.height) / target_density_ratio * density_ratio * resize_ratio)
+        
+        print('%s : %f, %f, %f' % (dpi_ratio[0], target_density_ratio, density_ratio, resize_ratio))
+        
+        if (new_width>new_img.width):
             warnings.append('Resource for %s has been upscaled by %0.2f' % 
-                            (dpi_ratio[0], new_width/img.width))
+                            (dpi_ratio[0], new_width/new_img.width))
         
-        # Create the new Image
-        new_img = gimpfu.pdb.gimp_edit_paste_as_new(); #@UndefinedVariable
+        # Save the new Image
         gimpfu.pdb.gimp_image_scale_full( #@UndefinedVariable
             new_img, new_width, new_height, gimpfu.INTERPOLATION_CUBIC)
         
