@@ -1,0 +1,110 @@
+#! /usr/bin/env python
+'''
+Created on 2012/04/20
+
+@author: nic
+
+This is a Gimp plugin
+
+Actions: 
+    - Save Visible Selection to android drawables into 
+        - res/drawable-ldpi 
+        - res/drawable-mdpi 
+        - res/drawable-hdpi 
+        - res/drawable-xhdpi 
+    - You can select a new width for the drawable and select the target density.
+    - Drawables for other densities will be scaled accordingly
+
+Installation: 
+    - Put this file into your gimp plugin directory, ie: ~/.gimp-2.6/plug-ins/gimpfu_android_xdpi.py
+    - Restart Gimp
+    - Run script via Filters/Android/Write Android XDPIs...
+'''
+
+import gimpfu
+import gimp
+import os
+
+DEFAULT_OUTPUT_DIR = os.getcwd()
+DEFAULT_OUTPUT_EXT = 'png'
+DEFAULT_OUTPUT_DPI = 'drawable-mdpi'
+
+UPSCALE_WARN_MESSAGE = '\nQuality of your application could be seriously affected when using upscaled bitmaps !'
+
+dpi_ratios = (('drawable-ldpi',0.75),
+              ('drawable-mdpi',1),
+              ('drawable-hdpi',1.5),
+              ('drawable-xhdpi',2))
+
+def crop_save_layers(img, layer, res_folder, image_basename, target_width, target_dpi, image_extension):
+    '''
+    Save all layers to cropped images, then save crop information to xml 
+    
+    @param img: gimp image
+    @param layer: gimp layer (or drawable)
+    @param res_folder: output directory : basically res folder of your android project 
+    @param image_basename: basename of your image, ex: icon
+    @param target_width: new width for your image
+    @param target_dpi: reference density for your target width
+    @param image_extension: output format
+    '''
+    
+    warnings = list()
+    
+    # resize requested by the user
+    resize_ratio = float(target_width) / float(img.width)
+    
+    # reference density requested by the user
+    target_density_ratio = dict(dpi_ratios).get(target_dpi)
+    
+    gimpfu.pdb.gimp_edit_copy_visible(img); #@UndefinedVariable
+    
+    for dpi_ratio in dpi_ratios:
+        target_res_folder = os.path.join(res_folder, dpi_ratio[0])
+        if (os.path.exists(res_folder) and not os.path.exists(target_res_folder)):
+            os.makedirs(target_res_folder)
+            
+        target_res_filename = os.path.join(target_res_folder, image_basename+'.'+image_extension)
+        
+        # Compute new dimensions for the image
+        density_ratio = dpi_ratio[1]
+        new_width = round(img.width / target_density_ratio * density_ratio * resize_ratio)
+        new_height = round(img.height / target_density_ratio * density_ratio * resize_ratio)
+        
+        if (new_width>img.width):
+            warnings.append('Resource for %s has been upscaled by %0.2f' % 
+                            (dpi_ratio[0], new_width/img.width))
+        
+        # Create the new Image
+        new_img = gimpfu.pdb.gimp_edit_paste_as_new(); #@UndefinedVariable
+        gimpfu.pdb.gimp_image_scale_full( #@UndefinedVariable
+            new_img, new_width, new_height, gimpfu.INTERPOLATION_CUBIC)
+        
+        gimpfu.pdb.gimp_file_save( #@UndefinedVariable
+            new_img, new_img.layers[0], target_res_filename, target_res_filename)
+        
+        gimpfu.pdb.gimp_image_delete(new_img) #@UndefinedVariable
+        
+    # Show warning message
+    if warnings: 
+        warnings.append(UPSCALE_WARN_MESSAGE)
+        gimp.message('\n'.join(warnings))
+
+gimpfu.register("python_fu_android_xdpi", 
+                "Write Android drawables for all DPI folders", 
+                "Write images for all android densities", 
+                "Nic", "Nicolas CORNETTE", "2012", 
+                "<Image>/Filters/Android/Write Android XDPIs...", 
+                "*", [
+#                    (gimpfu.PF_IMAGE, "image", "Input image", None),
+#                    (gimpfu.PF_DRAWABLE, "drawable", "Input drawable", None),
+                    (gimpfu.PF_DIRNAME, "res-folder",     "Project res Folder", DEFAULT_OUTPUT_DIR), #os.getcwd()),
+                    (gimpfu.PF_STRING, "image-basename", "Image Base Name", 'icon'),
+                    (gimpfu.PF_INT, "target-width", "Target Width", 48),
+                    (gimpfu.PF_RADIO, "target-dpi", "Target Density", DEFAULT_OUTPUT_DPI, (("ldpi", "drawable-ldpi"), ("mdpi", "drawable-mdpi"), ("hdpi", "drawable-hdpi"), ("xhdpi", "drawable-xhdpi"))),
+                    (gimpfu.PF_RADIO, "image-extension", "Image Format", DEFAULT_OUTPUT_EXT, (("gif", "gif"), ("png", "png"), ("jpg", "jpg"))),
+                      ], 
+                [], 
+                crop_save_layers) #, menu, domain, on_query, on_run)
+
+gimpfu.main()
