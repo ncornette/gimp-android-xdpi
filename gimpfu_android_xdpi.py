@@ -36,9 +36,9 @@ dpi_ratios = (('drawable-ldpi',0.75),
               ('drawable-hdpi',1.5),
               ('drawable-xhdpi',2))
 
-def crop_save_layers(img, layer, res_folder, image_basename, target_width, target_dpi, image_extension):
+def write_xdpi(img, layer, res_folder, image_basename, target_width, target_dpi, image_extension):
     '''
-    Save all layers to cropped images, then save crop information to xml 
+    Resize and write images for all android density folders 
     
     @param img: gimp image
     @param layer: gimp layer (or drawable)
@@ -105,6 +105,6 @@ gimpfu.register("python_fu_android_xdpi",
                     (gimpfu.PF_RADIO, "image-extension", "Image Format", DEFAULT_OUTPUT_EXT, (("gif", "gif"), ("png", "png"), ("jpg", "jpg"))),
                       ], 
                 [], 
-                crop_save_layers) #, menu, domain, on_query, on_run)
+                write_xdpi) #, menu, domain, on_query, on_run)
 
 gimpfu.main()
