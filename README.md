@@ -7,7 +7,7 @@ You can select a custom target width so you don't have to resize your picture.
 
 To write you app icon directly from you full size picture, use these parameters : 
 
-[![](https://lh5.googleusercontent.com/9ovI_ry3awmPs0tWjt2b08c5ykQxwFz7GQgltRxs3BOV5LREYr4pWPrMNunrZDeP5zCqig1kjiUmnd5-CmXzCNk_oKPTRC5i_qpbZBI_cazA29VC4dw)](https://lh5.googleusercontent.com/9ovI_ry3awmPs0tWjt2b08c5ykQxwFz7GQgltRxs3BOV5LREYr4pWPrMNunrZDeP5zCqig1kjiUmnd5-CmXzCNk_oKPTRC5i_qpbZBI_cazA29VC4dw) [![](https://lh5.googleusercontent.com/gJpDksuVSdFfzCrtmp9ebPv96e3NiyDUG68IaRhKzW6TwX-F5hmYkhcW3LMwDFKoWyrAsdzuNRh0chNmRd_yyAk_JECjk1nHamr_yoNK8WylfOrukfQ)](https://lh5.googleusercontent.com/gJpDksuVSdFfzCrtmp9ebPv96e3NiyDUG68IaRhKzW6TwX-F5hmYkhcW3LMwDFKoWyrAsdzuNRh0chNmRd_yyAk_JECjk1nHamr_yoNK8WylfOrukfQ)
+[![](https://lh5.googleusercontent.com/9ovI_ry3awmPs0tWjt2b08c5ykQxwFz7GQgltRxs3BOV5LREYr4pWPrMNunrZDeP5zCqig1kjiUmnd5-CmXzCNk_oKPTRC5i_qpbZBI_cazA29VC4dw)](https://lh5.googleusercontent.com/9ovI_ry3awmPs0tWjt2b08c5ykQxwFz7GQgltRxs3BOV5LREYr4pWPrMNunrZDeP5zCqig1kjiUmnd5-CmXzCNk_oKPTRC5i_qpbZBI_cazA29VC4dw) [![](https://lh6.googleusercontent.com/Tnh-CBdaOfsjZ5myoLH96zS4Akn_GvZbdIDRCT3p4gsk7Bp1nnCMQCJ_YlLjg-beorcq94UtSiv4UJfWRx6a7W-1Q2YlI68m_psy6VDADHMd7c-Svlc)](https://lh6.googleusercontent.com/Tnh-CBdaOfsjZ5myoLH96zS4Akn_GvZbdIDRCT3p4gsk7Bp1nnCMQCJ_YlLjg-beorcq94UtSiv4UJfWRx6a7W-1Q2YlI68m_psy6VDADHMd7c-Svlc)
 
 
  1. select your app res folder
