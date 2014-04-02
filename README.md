@@ -26,13 +26,13 @@ To write you app icon directly from you full size picture, select area for your 
 
 Use the reference values for an app icon, 48px on mdpi : 
 
-[![icon parameters](https://lh6.googleusercontent.com/Tnh-CBdaOfsjZ5myoLH96zS4Akn_GvZbdIDRCT3p4gsk7Bp1nnCMQCJ_YlLjg-beorcq94UtSiv4UJfWRx6a7W-1Q2YlI68m_psy6VDADHMd7c-Svlc)](https://lh6.googleusercontent.com/Tnh-CBdaOfsjZ5myoLH96zS4Akn_GvZbdIDRCT3p4gsk7Bp1nnCMQCJ_YlLjg-beorcq94UtSiv4UJfWRx6a7W-1Q2YlI68m_psy6VDADHMd7c-Svlc)
+![icon parameters](https://github.com/ncornette/gimp-android-xdpi/raw/master/screenshot.png)
 
 
  1. select your app res folder
  2. type `icon` as the image base name
  3. select a image width of `48`
- 4. select a density of `mdpi`
+ 4. select a densities to export
  5. select image format `png`
 
 Icon or Image resources for all densities will be scaled and written accordingly.
