@@ -27,16 +27,10 @@ import os
 
 DEFAULT_OUTPUT_DIR = os.getcwd()
 DEFAULT_OUTPUT_EXT = 'png'
-DEFAULT_OUTPUT_DPI = 'drawable-mdpi'
 
 UPSCALE_WARN_MESSAGE = '\nQuality of your application could be seriously affected when using upscaled bitmaps !'
 
-dpi_ratios = (('drawable-ldpi',0.75),
-              ('drawable-mdpi',1),
-              ('drawable-hdpi',1.5),
-              ('drawable-xhdpi',2))
-
-def write_xdpi(img, layer, res_folder, image_basename, target_width, target_dpi, image_extension):
+def write_xdpi(img, layer, res_folder, image_basename, target_width, x_ldpi, x_mdpi, x_hdpi, x_xhdpi, x_xxhdpi, x_xxxhdpi, image_extension):
     '''
     Resize and write images for all android density folders 
     
@@ -51,34 +45,40 @@ def write_xdpi(img, layer, res_folder, image_basename, target_width, target_dpi,
     
     warnings = list()
     
-    # reference density requested by the user
-    target_density_ratio = dict(dpi_ratios).get(target_dpi)
-    
     gimpfu.pdb.gimp_edit_copy_visible(img); #@UndefinedVariable
     
-    for dpi_ratio in dpi_ratios:
+    dpi_ratios = (('drawable-ldpi',    0.75 ,x_ldpi),
+                  ('drawable-mdpi',    1    ,x_mdpi),
+                  ('drawable-tvdpi',   1.33 ,False),
+                  ('drawable-hdpi',    1.5  ,x_hdpi),
+                  ('drawable-xhdpi',   2    ,x_xhdpi),
+                  ('drawable-xxhdpi',  3    ,x_xxhdpi),
+                  ('drawable-xxxhdpi', 4    ,x_xxxhdpi))
+
+    for folder, ratio, export in dpi_ratios:
+        if not export: 
+            continue
+
         new_img = gimpfu.pdb.gimp_edit_paste_as_new(); #@UndefinedVariable
         
         # resize requested by the user
         resize_ratio = float(target_width) / float(new_img.width)
 
-        target_res_folder = os.path.join(res_folder, dpi_ratio[0])
+        target_res_folder = os.path.join(res_folder, folder)
         if (os.path.exists(res_folder) and not os.path.exists(target_res_folder)):
             os.makedirs(target_res_folder)
             
         target_res_filename = os.path.join(target_res_folder, image_basename+'.'+image_extension)
         
         # Compute new dimensions for the image
-        density_ratio = dpi_ratio[1]
+        new_width = round(float(new_img.width) * ratio * resize_ratio)
+        new_height = round(float(new_img.height) * ratio * resize_ratio)
         
-        new_width = round(float(new_img.width) / target_density_ratio * density_ratio * resize_ratio)
-        new_height = round(float(new_img.height) / target_density_ratio * density_ratio * resize_ratio)
-        
-        print('%s : %f, %f, %f' % (dpi_ratio[0], target_density_ratio, density_ratio, resize_ratio))
+        print('%s : %f, %f' % (folder, ratio, resize_ratio))
         
         if (new_width>new_img.width):
             warnings.append('Resource for %s has been upscaled by %0.2f' % 
-                            (dpi_ratio[0], new_width/new_img.width))
+                            (folder, new_width/new_img.width))
         
         # Save the new Image
         gimpfu.pdb.gimp_image_scale_full( #@UndefinedVariable
@@ -100,12 +100,16 @@ gimpfu.register("python_fu_android_xdpi",
                 "Nic", "Nicolas CORNETTE", "2012", 
                 "<Image>/Filters/Android/Write Android XDPIs...", 
                 "*", [
-#                    (gimpfu.PF_IMAGE, "image", "Input image", None),
-#                    (gimpfu.PF_DRAWABLE, "drawable", "Input drawable", None),
                     (gimpfu.PF_DIRNAME, "res-folder",     "Project res Folder", DEFAULT_OUTPUT_DIR), #os.getcwd()),
                     (gimpfu.PF_STRING, "image-basename", "Image Base Name", 'icon'),
-                    (gimpfu.PF_INT, "target-width", "Target Width", 48),
-                    (gimpfu.PF_RADIO, "target-dpi", "Base Density", DEFAULT_OUTPUT_DPI, (("ldpi", "drawable-ldpi"), ("mdpi", "drawable-mdpi"), ("hdpi", "drawable-hdpi"), ("xhdpi", "drawable-xhdpi"))),
+                    (gimpfu.PF_INT, "target-width", "Target DP Width", 48),
+                    (gimpfu.PF_BOOL, "x_ldpi",    "  Export ldpi",   False),
+                    (gimpfu.PF_BOOL, "x_mdpi",    "  Export mdpi",   True),
+                    (gimpfu.PF_BOOL, "x_hdpi",    "  Export hdpi",   True),
+                    (gimpfu.PF_BOOL, "x_xhdpi",   "  Export xhdpi",  True),
+                    (gimpfu.PF_BOOL, "x_xxhdpi",  "  Export xxhdpi", False),
+                    (gimpfu.PF_BOOL, "x_xxxhdpi", "  Export xxxhdpi",False),
+                    #(gimpfu.PF_BOOL, "x_tvdpi",   "  Export tvdpi",  False),
                     (gimpfu.PF_RADIO, "image-extension", "Image Format", DEFAULT_OUTPUT_EXT, (("gif", "gif"), ("png", "png"), ("jpg", "jpg"))),
                       ], 
                 [], 
