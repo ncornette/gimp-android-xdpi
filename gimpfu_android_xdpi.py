@@ -61,8 +61,9 @@ def write_xdpi(img, layer, res_folder, image_basename, target_width, x_ldpi, x_m
 
         new_img = gimpfu.pdb.gimp_edit_paste_as_new(); #@UndefinedVariable
         
-        # resize requested by the user
-        resize_ratio = float(target_width) / float(new_img.width)
+        resize_ratio = float(target_width) / new_img.width
+        target_dp_width = target_width
+        target_dp_height = round(new_img.height * resize_ratio)
 
         target_res_folder = os.path.join(res_folder, folder)
         if (os.path.exists(res_folder) and not os.path.exists(target_res_folder)):
@@ -71,10 +72,10 @@ def write_xdpi(img, layer, res_folder, image_basename, target_width, x_ldpi, x_m
         target_res_filename = os.path.join(target_res_folder, image_basename+'.'+image_extension)
         
         # Compute new dimensions for the image
-        new_width = round(float(new_img.width) * ratio * resize_ratio)
-        new_height = round(float(new_img.height) * ratio * resize_ratio)
+        new_width = target_dp_width * ratio
+        new_height = target_dp_height * ratio
         
-        print('%s : %f, %f' % (folder, ratio, resize_ratio))
+        print('%s : %f' % (folder, ratio))
         
         if (new_width>new_img.width):
             warnings.append('Resource for %s has been upscaled by %0.2f' % 
