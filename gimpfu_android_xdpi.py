@@ -75,7 +75,7 @@ def write_xdpi(img, layer, res_folder, image_basename, target_width, x_ldpi, x_m
         new_width = target_dp_width * ratio
         new_height = target_dp_height * ratio
         
-        print('%s : %f' % (folder, ratio))
+        print('%s : %dx%d' % (folder, new_width, new_height))
         
         if (new_width>new_img.width):
             warnings.append('Resource for %s has been upscaled by %0.2f' % 
