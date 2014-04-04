@@ -103,7 +103,7 @@ gimpfu.register("python_fu_android_xdpi",
                 "*", [
                     (gimpfu.PF_DIRNAME, "res-folder",     "Project res Folder", DEFAULT_OUTPUT_DIR), #os.getcwd()),
                     (gimpfu.PF_STRING, "image-basename", "Image Base Name", 'icon'),
-                    (gimpfu.PF_INT, "target-width", "Target DP Width", 48),
+                    (gimpfu.PF_SPINNER, "target-width", "Target DP Width", 48, (1, 8000, 2)),
                     (gimpfu.PF_BOOL, "x_ldpi",    "  Export ldpi",   False),
                     (gimpfu.PF_BOOL, "x_mdpi",    "  Export mdpi",   True),
                     (gimpfu.PF_BOOL, "x_hdpi",    "  Export hdpi",   True),
