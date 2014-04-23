@@ -1,13 +1,15 @@
 gimp-android-xdpi
 =================
 
-Gimp plugin to export images or icons for any android density :  [gimpfu_android_xdpi.py](https://github.com/ncornette/gimp-android-xdpi/raw/master/gimpfu_android_xdpi.py)
+Gimp plugin to export images or icons for any android density : 
+[gimpfu_android_xdpi.py](https://github.com/ncornette/gimp-android-xdpi/raw/master/gimpfu_android_xdpi.py)
 
 ![Plugin Screenshot](https://github.com/ncornette/gimp-android-xdpi/raw/master/screenshot.png)
 
 ### Installation
 
- - Download the script [gimpfu_android_xdpi.py](https://github.com/ncornette/gimp-android-xdpi/raw/master/gimpfu_android_xdpi.py), save into your gimp plugin directory, ie: `~/.gimp-2.6/plug-ins/gimpfu_android_xdpi.py`
+ - Download the script [gimpfu_android_xdpi.py](https://github.com/ncornette/gimp-android-xdpi/raw/master/gimpfu_android_xdpi.py), 
+ save into your gimp plugin directory, ie: `~/.gimp-2.6/plug-ins/gimpfu_android_xdpi.py`
  - Restart Gimp
  - Run script via Filters/Android/Write Android XDPIs...
 
