@@ -27,16 +27,18 @@ import os
 
 DEFAULT_OUTPUT_DIR = os.getcwd()
 DEFAULT_OUTPUT_EXT = 'png'
+DEFAULT_FOLDER_PREFIX = 'drawable'
 
 UPSCALE_WARN_MESSAGE = '\nQuality of your application could be seriously affected when using upscaled bitmaps !'
 
-def write_xdpi(img, layer, res_folder, image_basename, target_width, x_ldpi, x_mdpi, x_hdpi, x_xhdpi, x_xxhdpi, x_xxxhdpi, image_extension):
+def write_xdpi(img, layer, res_folder, folder_prefix, image_basename, target_width, x_ldpi, x_mdpi, x_hdpi, x_xhdpi, x_xxhdpi, x_xxxhdpi, image_extension):
     '''
     Resize and write images for all android density folders 
     
     @param img: gimp image
     @param layer: gimp layer (or drawable)
     @param res_folder: output directory : basically res folder of your android project 
+    @param folder_prefix: android mipmap or drawable folder
     @param image_basename: basename of your image, ex: icon
     @param target_width: new width for your image
     @param target_dpi: reference density for your target width
@@ -47,13 +49,13 @@ def write_xdpi(img, layer, res_folder, image_basename, target_width, x_ldpi, x_m
     
     gimpfu.pdb.gimp_edit_copy_visible(img); #@UndefinedVariable
     
-    dpi_ratios = (('drawable-ldpi',    0.75 ,x_ldpi),
-                  ('drawable-mdpi',    1    ,x_mdpi),
-                  ('drawable-tvdpi',   1.33 ,False),
-                  ('drawable-hdpi',    1.5  ,x_hdpi),
-                  ('drawable-xhdpi',   2    ,x_xhdpi),
-                  ('drawable-xxhdpi',  3    ,x_xxhdpi),
-                  ('drawable-xxxhdpi', 4    ,x_xxxhdpi))
+    dpi_ratios = (('ldpi',    0.75 ,x_ldpi),
+                  ('mdpi',    1    ,x_mdpi),
+                  ('tvdpi',   1.33 ,False),
+                  ('hdpi',    1.5  ,x_hdpi),
+                  ('xhdpi',   2    ,x_xhdpi),
+                  ('xxhdpi',  3    ,x_xxhdpi),
+                  ('xxxhdpi', 4    ,x_xxxhdpi))
 
     for folder, ratio, export in dpi_ratios:
         if not export: 
@@ -65,11 +67,12 @@ def write_xdpi(img, layer, res_folder, image_basename, target_width, x_ldpi, x_m
         target_dp_width = target_width
         target_dp_height = round(new_img.height * resize_ratio)
 
-        target_res_folder = os.path.join(res_folder, folder)
+        
+        target_res_folder = os.path.join(res_folder, folder_prefix + '-' + folder)
         if (os.path.exists(res_folder) and not os.path.exists(target_res_folder)):
             os.makedirs(target_res_folder)
             
-        target_res_filename = os.path.join(target_res_folder, image_basename+'.'+image_extension)
+        target_res_filename = os.path.join(target_res_folder, image_basename + '.' + image_extension)
         
         # Compute new dimensions for the image
         new_width = target_dp_width * ratio
@@ -102,6 +105,7 @@ gimpfu.register("python_fu_android_xdpi",
                 "<Image>/Filters/Android/Write Android XDPIs...", 
                 "*", [
                     (gimpfu.PF_DIRNAME, "res-folder",     "Project res Folder", DEFAULT_OUTPUT_DIR), #os.getcwd()),
+                    (gimpfu.PF_RADIO, "folder-prefix", "Android Folder Prefix", DEFAULT_FOLDER_PREFIX, (("drawable", "drawable"), ("mipmap", "mipmap"))),
                     (gimpfu.PF_STRING, "image-basename", "Image Base Name", 'icon'),
                     (gimpfu.PF_SPINNER, "target-width", "Target DP Width", 48, (1, 8000, 2)),
                     (gimpfu.PF_BOOL, "x_ldpi",    "  Export ldpi",   False),
