@@ -33,10 +33,11 @@ Use the reference values for an app icon, 48px on mdpi :
 
 
  1. select your app res folder
- 2. type `icon` as the image base name
- 3. select image DP width of `48`
- 4. select densities to export
- 5. select image format `png`
+ 2. Pick drawable or mipmap as your export folder prefix
+ 3. type `icon` as the image base name
+ 4. select image DP width of `48`
+ 5. select densities to export
+ 6. select image format `png`
 
 Icon or Image resources for all densities will be scaled and written accordingly.
 You will be warned if an image has been upscaled
