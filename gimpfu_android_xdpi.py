@@ -31,7 +31,7 @@ DEFAULT_FOLDER_PREFIX = 'drawable'
 
 UPSCALE_WARN_MESSAGE = '\nQuality of your application could be seriously affected when using upscaled bitmaps !'
 
-def write_xdpi(img, layer, res_folder, folder_prefix, image_basename, target_width, x_ldpi, x_mdpi, x_hdpi, x_xhdpi, x_xxhdpi, x_xxxhdpi, never_upscale, image_extension):
+def write_xdpi(img, layer, res_folder, folder_prefix, image_basename, target_width, x_ldpi, x_mdpi, x_hdpi, x_xhdpi, x_xxhdpi, x_xxxhdpi, allow_upscale, image_extension):
     '''
     Resize and write images for all android density folders 
     
@@ -42,7 +42,7 @@ def write_xdpi(img, layer, res_folder, folder_prefix, image_basename, target_wid
     @param image_basename: basename of your image, ex: icon
     @param target_width: new width for your image
     @param target_dpi: reference density for your target width
-    @param never_upscale: wether to refuse to create upscaled images
+    @param allow_upscale: whether to create upscaled images
     @param image_extension: output format
     '''
     
@@ -75,7 +75,7 @@ def write_xdpi(img, layer, res_folder, folder_prefix, image_basename, target_wid
         print('%s : %dx%d' % (folder, new_width, new_height))
         
         if (new_width>new_img.width):
-            if never_upscale:
+            if not allow_upscale:
                 warnings.append('Not creating resource for %s upscaled by %0.2f' %
                             (folder, new_width/new_img.width))
                 continue
@@ -120,7 +120,7 @@ gimpfu.register("python_fu_android_xdpi",
                     (gimpfu.PF_BOOL, "x_xxhdpi",  "  Export xxhdpi", True),
                     (gimpfu.PF_BOOL, "x_xxxhdpi", "  Export xxxhdpi",False),
                     #(gimpfu.PF_BOOL, "x_tvdpi",   "  Export tvdpi",  False),
-                    (gimpfu.PF_BOOL, "never_upscale", "  Never create upscaled images", True),
+                    (gimpfu.PF_BOOL, "allow_upscale", "  Create upscaled images", False),
                     (gimpfu.PF_RADIO, "image-extension", "Image Format", DEFAULT_OUTPUT_EXT, (("gif", "gif"), ("png", "png"), ("jpg", "jpg"))),
                       ], 
                 [], 
