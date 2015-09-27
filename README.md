@@ -40,8 +40,10 @@ Use the reference values for an app icon, 48px on mdpi :
  5. select densities to export
  6. select image format `png`
 
-Icon or Image resources for all densities will be scaled and written accordingly.
-You will be warned if an image has been upscaled
+
+Icon or Image resources for all densities will be scaled and written
+accordingly, except that by default upscaled images won't be upscaled.  You
+can force creating upscaled images by using the appropiate option.
 
 [![export result](https://lh6.googleusercontent.com/LT7vn7uo2jmjul4ejuu59iM4elDto1TsjagX1Zp5wdgzPghQ_TBsUKGOF65y7m6XwW2DaTpJlxS2GxU9Xi3jklrxj2bR8c6d8blc6dgi8Iwnri56SlM)](https://lh6.googleusercontent.com/LT7vn7uo2jmjul4ejuu59iM4elDto1TsjagX1Zp5wdgzPghQ_TBsUKGOF65y7m6XwW2DaTpJlxS2GxU9Xi3jklrxj2bR8c6d8blc6dgi8Iwnri56SlM)
 
